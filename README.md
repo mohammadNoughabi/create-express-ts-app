@@ -56,7 +56,6 @@ npx create-exts-app <project-name> [options]
 | `-t, --template <type>` | Template to use: `minimal`, `standard`, or `advanced` | `standard` |
 | `--docker` | Include Docker setup (`standard`/`advanced` only) | `false` |
 | `--skip-git` | Skip `git init` | `false` |
-| `--skip-install` | Skip `npm install` after scaffolding | `false` |
 | `-V, --version` | Print the CLI version | — |
 | `-h, --help` | Show help | — |
 
@@ -114,4 +113,4 @@ Issues and pull requests are welcome. If you're proposing a larger change (a new
 
 ## License
 
-MIT © [Mohammad Hossein Noughabi](https://www.npmjs.com/mohammadnoughabi)
+MIT © [Mohammad Hossein Noughabi](https://www.npmjs.com/~mohammadnoughabi)
