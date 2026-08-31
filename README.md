@@ -1,15 +1,15 @@
-# create-express-ts-app
+# create-exts-app
 
 A CLI to scaffold a production-ready **Express + TypeScript** API in seconds — no configuration required.
 
-[![npm version](https://img.shields.io/npm/v/create-express-ts-app.svg)](https://www.npmjs.com/package/create-express-ts-app)
-[![license](https://img.shields.io/npm/l/create-express-ts-app.svg)](./LICENSE)
-[![node](https://img.shields.io/node/v/create-express-ts-app.svg)](https://nodejs.org)
+[![npm version](https://img.shields.io/npm/v/create-exts-app.svg)](https://www.npmjs.com/package/create-exts-app)
+[![license](https://img.shields.io/npm/l/create-exts-app.svg)](./LICENSE)
+[![node](https://img.shields.io/node/v/create-exts-app.svg)](https://nodejs.org)
 
 ## Quick Start
 
 ```bash
-npx create-express-ts-app my-api
+npx create-exts-app my-api
 cd my-api
 npm run dev
 ```
@@ -19,7 +19,7 @@ That's it — you have a running Express + TypeScript server with hot reload.
 You can also run it without a project name to get interactive prompts:
 
 ```bash
-npx create-express-ts-app
+npx create-exts-app
 ```
 
 ## Features
@@ -46,7 +46,7 @@ Choose one with `-t`/`--template`, or pick interactively if you omit it.
 ## Usage
 
 ```bash
-npx create-express-ts-app <project-name> [options]
+npx create-exts-app <project-name> [options]
 ```
 
 ### Options
@@ -64,16 +64,16 @@ npx create-express-ts-app <project-name> [options]
 
 ```bash
 # Interactive mode — prompts for name, template, and Docker
-npx create-express-ts-app
+npx create-exts-app
 
 # Standard template (default), skip Docker prompt entirely
-npx create-express-ts-app my-api
+npx create-exts-app my-api
 
 # Advanced template with Docker included
-npx create-express-ts-app my-api --template advanced --docker
+npx create-exts-app my-api --template advanced --docker
 
 # Minimal template, no git repo, no auto-install
-npx create-express-ts-app my-api --template minimal --skip-git --skip-install
+npx create-exts-app my-api --template minimal --skip-git --skip-install
 ```
 
 ## What You Get
