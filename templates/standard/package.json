@@ -29,12 +29,12 @@
     "express": "^5.2.0"
   },
   "devDependencies": {
-    "@eslint/js":"9.39.5",
+    "@eslint/js": "9.39.5",
     "@types/express": "^5.0.0",
     "@types/node": "^22.0.0",
     "@types/supertest": "^6.0.0",
-    "eslint": "^10.9.1",
-    "eslint-plugin-import":"2.32.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-import": "2.32.0",
     "globals": "^15.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.0.0",

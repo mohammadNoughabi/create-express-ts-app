@@ -1,54 +1,67 @@
 #!/usr/bin/env node
 
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-import { existsSync, readFileSync, writeFileSync, cpSync, mkdirSync, rmSync } from 'node:fs';
-import { execSync } from 'node:child_process';
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  cpSync,
+  mkdirSync,
+  rmSync,
+} from "node:fs";
+import { execSync } from "node:child_process";
 
-import { Command } from 'commander';
-import inquirer from 'inquirer';
-import chalk from 'chalk';
-import ora from 'ora';
-import figlet from 'figlet';
+import { Command } from "commander";
+import inquirer from "inquirer";
+import chalk from "chalk";
+import ora from "ora";
+import figlet from "figlet";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const program = new Command();
 
 program
-  .name('create-exts-app')
-  .description('Scaffold a production-ready Express + TypeScript API')
-  .version('1.0.0')
-  .argument('[project-name]', 'Name of your project')
-  .option('-t, --template <type>', 'Template variant', 'standard')
-  .option('--skip-git', 'Skip Git initialization')
-  .option('--docker', 'Include Docker setup')
+  .name("create-exts-app")
+  .description("Scaffold a production-ready Express + TypeScript API")
+  .version("1.0.0")
+  .argument("[project-name]", "Name of your project")
+  .option("-t, --template <type>", "Template variant", "standard")
+  .option("--skip-git", "Skip Git initialization")
+  .option("--docker", "Include Docker setup")
   .action(async (projectName, options) => {
     // Interactive prompts if name not provided
     if (!projectName) {
       const answers = await inquirer.prompt([
         {
-          type: 'input',
-          name: 'name',
-          message: 'Project name:',
-          validate: (input) => input.trim() !== '' || 'Name is required',
+          type: "input",
+          name: "name",
+          message: "Project name:",
+          validate: (input) => input.trim() !== "" || "Name is required",
         },
         {
-          type: 'list',
-          name: 'template',
-          message: 'Choose a template:',
+          type: "list",
+          name: "template",
+          message: "Choose a template:",
           choices: [
-            { name: 'Minimal    (Express + TS only)', value: 'minimal' },
-            { name: 'Standard   (+ ESLint, Prettier, Vitest, Husky)', value: 'standard' },
-            { name: 'Advanced   (+ Docker, Swagger, Zod, Pino, CI/CD)', value: 'advanced' },
+            { name: "Minimal    (Express + TS only)", value: "minimal" },
+            {
+              name: "Standard   (+ ESLint, Prettier, Vitest, Husky)",
+              value: "standard",
+            },
+            {
+              name: "Advanced   (+ Docker, Swagger, Zod, Pino, CI/CD)",
+              value: "advanced",
+            },
           ],
-          default: 'standard',
+          default: "standard",
         },
         {
-          type: 'confirm',
-          name: 'docker',
-          message: 'Include Docker setup?',
+          type: "confirm",
+          name: "docker",
+          message: "Include Docker setup?",
           default: false,
-          when: (ans) => ans.template !== 'minimal',
+          when: (ans) => ans.template !== "minimal",
         },
       ]);
       projectName = answers.name;
@@ -59,17 +72,19 @@ program
     const targetDir = join(process.cwd(), projectName);
 
     if (existsSync(targetDir)) {
-      console.error(chalk.red(`\n❌ Directory "${projectName}" already exists.\n`));
+      console.error(
+        chalk.red(`\n❌ Directory "${projectName}" already exists.\n`),
+      );
       process.exit(1);
     }
 
     // Fancy header
-    console.log(chalk.cyan(figlet.textSync('Express TS', { font: 'Small' })));
-    console.log(chalk.gray('Scaffolding your project...\n'));
+    console.log(chalk.cyan(figlet.textSync("Express TS", { font: "Small" })));
+    console.log(chalk.gray("Scaffolding your project...\n"));
 
     // Step 1: Copy template
-    const spinner = ora('Copying template files...').start();
-    const templateDir = join(__dirname, '..', 'templates', options.template);
+    const spinner = ora("Copying template files...").start();
+    const templateDir = join(__dirname, "..", "templates", options.template);
 
     if (!existsSync(templateDir)) {
       spinner.fail(chalk.red(`Template "${options.template}" not found.`));
@@ -78,17 +93,17 @@ program
 
     mkdirSync(targetDir, { recursive: true });
     cpSync(templateDir, targetDir, { recursive: true });
-    spinner.succeed('Template files copied');
+    spinner.succeed("Template files copied");
 
     // Step 2: Update package.json name
-    const pkgPath = join(targetDir, 'package.json');
-    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+    const pkgPath = join(targetDir, "package.json");
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
     pkg.name = projectName;
-    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
 
     // Step 3: Conditional Docker files
     if (!options.docker) {
-      const dockerFiles = ['Dockerfile', 'docker-compose.yml', '.dockerignore'];
+      const dockerFiles = ["Dockerfile", "docker-compose.yml", ".dockerignore"];
       dockerFiles.forEach((f) => {
         const p = join(targetDir, f);
         if (existsSync(p)) rmSync(p);
@@ -97,48 +112,48 @@ program
 
     // Step 4: Git init
     if (!options.skipGit) {
-      const gitSpinner = ora('Initializing Git repository...').start();
+      const gitSpinner = ora("Initializing Git repository...").start();
       try {
-        execSync('git init', { cwd: targetDir, stdio: 'ignore' });
-        execSync('git checkout -b main', { cwd: targetDir, stdio: 'ignore' });
-        gitSpinner.succeed('Git repository initialized');
+        execSync("git init", { cwd: targetDir, stdio: "ignore" });
+        execSync("git checkout -b main", { cwd: targetDir, stdio: "ignore" });
+        gitSpinner.succeed("Git repository initialized");
       } catch {
-        gitSpinner.warn('Git initialization failed');
+        gitSpinner.warn("Git initialization failed");
       }
     }
 
     // Step 5: Setup Husky (standard & advanced only)
-    if (options.template !== 'minimal') {
-      const huskySpinner = ora('Setting up Git hooks...').start();
+    if (options.template !== "minimal") {
+      const huskySpinner = ora("Setting up Git hooks...").start();
       try {
-        execSync('npx husky init', { cwd: targetDir, stdio: 'ignore' });
-        const preCommit = join(targetDir, '.husky', 'pre-commit');
-        writeFileSync(preCommit, 'npx lint-staged\n', { mode: 0o755 });
+        execSync("npx husky init", { cwd: targetDir, stdio: "ignore" });
+        const preCommit = join(targetDir, ".husky", "pre-commit");
+        writeFileSync(preCommit, "npx lint-staged\n", { mode: 0o755 });
 
         // Pre-push for advanced
-        if (options.template === 'advanced') {
-          const prePush = join(targetDir, '.husky', 'pre-push');
-          writeFileSync(prePush, 'npm run test:run\n', { mode: 0o755 });
+        if (options.template === "advanced") {
+          const prePush = join(targetDir, ".husky", "pre-push");
+          writeFileSync(prePush, "npm run test:run\n", { mode: 0o755 });
         }
-        huskySpinner.succeed('Git hooks configured');
+        huskySpinner.succeed("Git hooks configured");
       } catch {
-        huskySpinner.warn('Husky setup failed. Run `npx husky init` manually.');
+        huskySpinner.warn("Husky setup failed. Run `npx husky init` manually.");
       }
     }
 
     // Step 6: Generate README for advanced
-    if (options.template === 'advanced') {
+    if (options.template === "advanced") {
       const readme = generateReadme(projectName, options);
-      writeFileSync(join(targetDir, 'README.md'), readme);
+      writeFileSync(join(targetDir, "README.md"), readme);
     }
 
     // Success message
     console.log(chalk.green.bold(`\n✅ Successfully created ${projectName}\n`));
-    console.log(chalk.white('Get started:'));
+    console.log(chalk.white("Get started:"));
     console.log(chalk.cyan(`  cd ${projectName}`));
-    if (options.skipInstall) console.log(chalk.cyan('  npm install'));
-    console.log(chalk.cyan('  npm run dev'));
-    console.log(chalk.gray('\n📖 Read the README.md for more commands.\n'));
+    console.log(chalk.cyan("  npm install"));
+    console.log(chalk.cyan("  npm run dev"));
+    console.log(chalk.gray("\n📖 Read the README.md for more commands.\n"));
   });
 
 function generateReadme(name, opts) {
@@ -167,12 +182,16 @@ npm run dev
 | \`npm run lint:fix\` | Fix linting issues |
 | \`npm run format\` | Format code with Prettier |
 
-${opts.docker ? `## 🐳 Docker
+${
+  opts.docker
+    ? `## 🐳 Docker
 
 \`\`\`bash
 docker-compose up --build
 \`\`\`
-` : ''}
+`
+    : ""
+}
 ## 📁 Project Structure
 
 \`\`\`
