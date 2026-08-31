@@ -15,7 +15,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const program = new Command();
 
 program
-  .name('create-express-ts-app')
+  .name('create-exts-app')
   .description('Scaffold a production-ready Express + TypeScript API')
   .version('1.0.0')
   .argument('[project-name]', 'Name of your project')

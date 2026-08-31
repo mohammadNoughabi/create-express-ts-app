@@ -10,7 +10,7 @@ const swaggerDocument = {
   },
   servers: [{ url: 'http://localhost:3000' }],
   paths: {
-    '/health': {
+    '/api/health': {
       get: {
         summary: 'Health check',
         responses: {

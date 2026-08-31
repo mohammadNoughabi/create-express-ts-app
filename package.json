@@ -1,10 +1,10 @@
 {
-  "name": "create-express-ts-app",
+  "name": "create-exts-app",
   "version": "1.0.0",
   "description": "Scaffold a production-ready Express + TypeScript API with professional tooling",
   "type": "module",
   "bin": {
-    "create-express-ts-app": "./bin/cli.js"
+    "create-exts-app": "bin/cli.js"
   },
   "files": [
     "bin/",
