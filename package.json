@@ -1,6 +1,6 @@
 {
   "name": "create-exts-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Scaffold a production-ready Express + TypeScript API with professional tooling",
   "type": "module",
   "bin": {
