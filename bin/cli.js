@@ -21,7 +21,6 @@ program
   .argument('[project-name]', 'Name of your project')
   .option('-t, --template <type>', 'Template variant', 'standard')
   .option('--skip-git', 'Skip Git initialization')
-  .option('--skip-install', 'Skip dependency installation')
   .option('--docker', 'Include Docker setup')
   .action(async (projectName, options) => {
     // Interactive prompts if name not provided
@@ -108,19 +107,8 @@ program
       }
     }
 
-    // Step 5: Install deps
-    if (!options.skipInstall) {
-      const installSpinner = ora('Installing dependencies...').start();
-      try {
-        execSync('npm install', { cwd: targetDir, stdio: 'ignore' });
-        installSpinner.succeed('Dependencies installed');
-      } catch {
-        installSpinner.warn('Dependency installation failed. Run `npm install` manually.');
-      }
-    }
-
-    // Step 6: Setup Husky (standard & advanced only)
-    if (!options.skipInstall && options.template !== 'minimal') {
+    // Step 5: Setup Husky (standard & advanced only)
+    if (options.template !== 'minimal') {
       const huskySpinner = ora('Setting up Git hooks...').start();
       try {
         execSync('npx husky init', { cwd: targetDir, stdio: 'ignore' });
@@ -138,7 +126,7 @@ program
       }
     }
 
-    // Step 7: Generate README for advanced
+    // Step 6: Generate README for advanced
     if (options.template === 'advanced') {
       const readme = generateReadme(projectName, options);
       writeFileSync(join(targetDir, 'README.md'), readme);
